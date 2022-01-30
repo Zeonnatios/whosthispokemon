@@ -70,26 +70,22 @@ export default {
       poke_name_area: '',
       input_name: '',
       pokemon: '',
-      disabled: 0,
+      disabled: false,
       messages: {
         success: {
-          severity: 'success', summary: 'Parabéns', detail: 'Parabéns, você acertou !', life: 3000,
+          severity: 'success', summary: 'Parabéns', detail: 'Parabéns, você acertou :)', life: 3000,
         },
         info: {
-          severity: 'info', summary: 'OPS...', detail: 'Parabéns, você acertou !', life: 3000,
+          severity: 'info', summary: 'OPS...', detail: 'Você precisa digitar um nome de pokémon :)', life: 3000,
         },
         error: {
-          severity: 'error', summary: 'Não foi dessa vez, tente de novo', detail: 'Parabéns, você acertou !', life: 3000,
+          severity: 'error', summary: 'Não foi dessa vez', detail: 'Vocẽ pode tentar denovo :)', life: 3000,
         },
       },
     };
   },
 
   methods: {
-
-    handleChangeInputStatus() {
-      this.disabled = !this.disabled;
-    },
 
     getRandomIntInclusive() {
       const min = 1;
@@ -125,34 +121,41 @@ export default {
 
     showSuccess() {
       this.$toast.add(this.$toast.add(this.messages.success));
+      this.disabled = true;
     },
     showInfo() {
       this.$toast.add(this.$toast.add(this.messages.info));
     },
     showError() {
       this.$toast.add(this.$toast.add(this.messages.error));
+      this.disabled = true;
     },
 
     showResult() {
       this.bright = false;
       this.poke_name_area = this.poke_name;
-      this.handleChangeInputStatus();
+    },
+
+    confirmPokemon() {
+      if (this.input_name.length === 0) this.showInfo();
+      if (this.input_name !== this.poke_name) {
+        this.showResult();
+        this.showError();
+      }
+      if (this.input_name === this.poke_name) {
+        this.showResult();
+        this.showSuccess();
+      }
     },
 
     clear() {
       this.input_name = '';
     },
 
-    confirmPokemon() {
-      this.showResult();
-      console.log(this.poke_name);
-      console.log(this.input_name);
-    },
-
     async nextPokemon() {
       this.clear();
       await this.generatePokemon();
-      this.handleChangeInputStatus();
+      this.disabled = false;
     },
 
   },
