@@ -14,7 +14,7 @@
       </template>
       <template #footer>
         <span class="p-float-label">
-          <InputText id="pokemon_input" type="text" v-model="input_name" />
+          <InputText class="p-inputtext-lg" id="pokemon_input" type="text" v-model="input_name" />
           <label for="pokemon_input">Qual o nome do Pokémon ?</label>
         </span>
         <div class="button_area">
@@ -48,6 +48,23 @@ export default {
     };
   },
   methods: {
+    getRandomIntInclusive() {
+      const min = 1;
+      const max = 386;
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+
+    async fetchPokemon(id) {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+      return response.json();
+    },
+
+    async generatePokemon() {
+      const randomId = this.getRandomIntInclusive();
+      const pokemon = await this.fetchPokemon(randomId);
+      console.log(pokemon);
+    },
+
     getPokemonNameLength() {
       console.log(this.poke_name.length);
       for (let index = 0; index < this.poke_name.length; index += 1) {
@@ -85,7 +102,7 @@ export default {
 
 .button_area {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   padding: 15px 0;
 }
 
