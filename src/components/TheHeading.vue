@@ -17,11 +17,12 @@ export default {
     justify-content: center;
     height: 80px;
     width: 100%;
-    padding: 15px 20px;
+    padding: 50px;
     font-size: 20px;
-    color: yellow;
+    color: #ffde00;
     -webkit-text-stroke-width: 3px;
-    -webkit-text-stroke-color: #000;
-    letter-spacing: 6px;
+    -webkit-text-stroke-color: #3b4cca;
+    letter-spacing: 7px;
+    text-align: center;
   }
 </style>
