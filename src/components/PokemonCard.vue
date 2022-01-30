@@ -1,4 +1,5 @@
 <template>
+  <Toast />
   <div class="main">
     <Card>
       <template #header>
@@ -14,13 +15,31 @@
       </template>
       <template #footer>
         <span class="p-float-label">
-          <InputText class="p-inputtext-lg" id="pokemon_input" type="text" v-model="input_name" />
+          <InputText
+            class="p-inputtext-lg"
+            id="pokemon_input"
+            type="text"
+            v-model="input_name"
+            :disabled="disabled"
+          />
           <label for="pokemon_input">Qual o nome do Pokémon ?</label>
         </span>
         <div class="button_area">
-          <Button icon="pi pi-check" class="p-button-rounded p-button-success p-button-outlined" />
-          <Button icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined" />
-          <Button icon="pi pi-caret-right" class="p-button-rounded p-button-outlined" />
+          <Button
+            icon="pi pi-check"
+            class="p-button-rounded p-button-success p-button-outlined"
+            @click="confirmPokemon"
+          />
+          <Button
+            icon="pi pi-times"
+            class="p-button-rounded p-button-danger p-button-outlined"
+            @click="clear"
+          />
+          <Button
+            icon="pi pi-caret-right"
+            class="p-button-rounded p-button-outlined"
+            @click="nextPokemon"
+          />
         </div>
       </template>
     </Card>
@@ -28,9 +47,11 @@
 </template>
 
 <script>
+
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import Toast from 'primevue/toast';
 
 export default {
   name: 'PokemonCard',
@@ -38,7 +59,9 @@ export default {
     Card,
     Button,
     InputText,
+    Toast,
   },
+
   data() {
     return {
       bright: true,
@@ -46,10 +69,28 @@ export default {
       poke_image: '',
       poke_name_area: '',
       input_name: '',
-      pokemon: {},
+      pokemon: '',
+      disabled: 0,
+      messages: {
+        success: {
+          severity: 'success', summary: 'Parabéns', detail: 'Parabéns, você acertou !', life: 3000,
+        },
+        info: {
+          severity: 'info', summary: 'OPS...', detail: 'Parabéns, você acertou !', life: 3000,
+        },
+        error: {
+          severity: 'error', summary: 'Não foi dessa vez, tente de novo', detail: 'Parabéns, você acertou !', life: 3000,
+        },
+      },
     };
   },
+
   methods: {
+
+    handleChangeInputStatus() {
+      this.disabled = !this.disabled;
+    },
+
     getRandomIntInclusive() {
       const min = 1;
       const max = 386;
@@ -57,7 +98,7 @@ export default {
     },
 
     generateHiddenName() {
-      console.log(this.poke_name.length);
+      this.poke_name_area = '';
       for (let index = 0; index < this.poke_name.length; index += 1) {
         this.poke_name_area += '_ ';
       }
@@ -75,16 +116,48 @@ export default {
     },
 
     async generatePokemon() {
+      this.bright = true;
       const randomId = this.getRandomIntInclusive();
       const dataPokemon = await this.fetchPokemon(randomId);
-      await this.insertPokemon(dataPokemon);
+      this.insertPokemon(dataPokemon);
       this.generateHiddenName();
+    },
+
+    showSuccess() {
+      this.$toast.add(this.$toast.add(this.messages.success));
+    },
+    showInfo() {
+      this.$toast.add(this.$toast.add(this.messages.info));
+    },
+    showError() {
+      this.$toast.add(this.$toast.add(this.messages.error));
+    },
+
+    showResult() {
+      this.bright = false;
+      this.poke_name_area = this.poke_name;
+      this.handleChangeInputStatus();
+    },
+
+    clear() {
+      this.input_name = '';
+    },
+
+    confirmPokemon() {
+      this.showResult();
+      console.log(this.poke_name);
+      console.log(this.input_name);
+    },
+
+    async nextPokemon() {
+      this.clear();
+      await this.generatePokemon();
+      this.handleChangeInputStatus();
     },
 
   },
 
   mounted() {
-    this.generateHiddenName();
     this.generatePokemon();
   },
 
