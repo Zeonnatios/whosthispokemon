@@ -5,7 +5,7 @@
           <img
             class="poke_image"
             :class="{ no_brightness: bright }"
-            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/123.png"
+            :src="poke_image"
             :alt="poke_name"
           />
       </template>
@@ -42,9 +42,11 @@ export default {
   data() {
     return {
       bright: true,
-      poke_name: 'Scyther',
+      poke_name: '',
+      poke_image: '',
       poke_name_area: '',
       input_name: '',
+      pokemon: {},
     };
   },
   methods: {
@@ -54,27 +56,36 @@ export default {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
-    async fetchPokemon(id) {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-      return response.json();
-    },
-
-    async generatePokemon() {
-      const randomId = this.getRandomIntInclusive();
-      const pokemon = await this.fetchPokemon(randomId);
-      console.log(pokemon);
-    },
-
-    getPokemonNameLength() {
+    generateHiddenName() {
       console.log(this.poke_name.length);
       for (let index = 0; index < this.poke_name.length; index += 1) {
         this.poke_name_area += '_ ';
       }
     },
+
+    async fetchPokemon(id) {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+      return response.json();
+    },
+
+    insertPokemon(data) {
+      this.pokemon = data;
+      this.poke_name = data.name;
+      this.poke_image = data.sprites.other['official-artwork'].front_default;
+    },
+
+    async generatePokemon() {
+      const randomId = this.getRandomIntInclusive();
+      const dataPokemon = await this.fetchPokemon(randomId);
+      await this.insertPokemon(dataPokemon);
+      this.generateHiddenName();
+    },
+
   },
 
   mounted() {
-    this.getPokemonNameLength();
+    this.generateHiddenName();
+    this.generatePokemon();
   },
 
 };
