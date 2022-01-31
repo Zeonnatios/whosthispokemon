@@ -1,24 +1,37 @@
-# whosthispokemon
+# Bem Vindo ao projeto - whosthispokemon
 
-## Project setup
-```
-npm install
-```
+## Este projeto foi feito baseado no minigame "Quem é esse Pokémon ?" do anime Pokémon, no momento dos comerciais.
+---
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Instalando as aplicações
 
-### Compiles and minifies for production
-```
-npm run build
-```
+Para instalar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
 
-### Lints and fixes files
-```
-npm run lint
+ **Node**: [Download Node.js](https://nodejs.org/en/download/)
+ 
+ **Git**: [Download Git](https://git-scm.com/downloads)
+
+
+```bash
+ # Clone este repositório
+$ git clone  <git@github.com:Zeonnatios/whosthispokemon.git>
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Para instalar o projeto
+
+```bash
+# A partir da pasta raiz do projeto whosthispokemon
+$ cd whosthispokemon/
+
+# Instale as dependências com o npm ou yarn
+$ npm install
+ou
+$ yarn install
+
+# Execute a aplicação com npm ou o yarn
+$ npm run serve
+ou
+$ yarn run serve
+
+# O servidor inciará na porta:8080 - acesse <http://localhost:8080/> e entrará na aplicação frontend
+```
